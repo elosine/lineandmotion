@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Notation Practice</title>
+<script src="/socket.io/socket.io.js"></script>
+<style>
+  #nframe {
+    background-color: PaleGreen;
+    position: absolute;
+    top: 200px;
+  }
+
+  #timeline_svg {
+    background-color: black;
+    position: absolute;
+    top: 25px;
+    height: 100px;
+    left: 25px;
+    width: 1000px;
+  }
+</style>
+
+<body bgcolor="#708090">
+
+  <!-- svg canvas element -->
+  <svg id="timeline_svg" xmlns="http://www.w3.org/2000/svg">
+    <line x1="300" y1="0" x2="300" y2="200" style="stroke:rgb(255,255,0);stroke-width:3" />
+  </svg>
+
+  <!-- vexflow element -->
+  <div id="nframe"></div>
+
+
+  <!-- SCRIPTS AFTER DOM ELEMENTS -->
+  <script src="/vexflow/releases/vexflow-min.js "></script>
+  <script src="lineandmotion_notation.js"></script>
+
+</body>

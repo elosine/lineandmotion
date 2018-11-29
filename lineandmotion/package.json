@@ -1,0 +1,11 @@
+{
+  "name": "notation_example",
+  "version": "1",
+  "description": "notation",
+  "dependencies": {
+    "express": "^4.16.4",
+    "osc": "^2.2.4",
+    "socket.io": "^2.1.1",
+    "vexflow": "^1.2.87"
+  }
+}
