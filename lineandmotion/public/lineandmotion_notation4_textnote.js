@@ -97,6 +97,8 @@ socket.on('newtime',
 //END OSC via websockets /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
+
+
 //VexFlow Notation /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 VF = Vex.Flow;
@@ -104,25 +106,62 @@ VF = Vex.Flow;
 var div = document.getElementById("nframe")
 var renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
 // Configure the rendering context.
-renderer.resize(100, 133);
-var context = renderer.getContext();
-context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
+renderer.resize(290, 133);
+var ctx = renderer.getContext();
+ctx.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
+
 // Create a stave of width 400 at position 10, 40 on the canvas.
 var stave = new VF.Stave(5, 5, 300);
 stave.addClef("treble");
-var notes = [
-  new VF.StaveNote({
-    clef: "treble",
-    keys: ["c/5"],
-    duration: "w"
-  })
-];
-var voice = new VF.Voice({
-  num_beats: 4,
-  beat_value: 4
-});
-voice.addTickables(notes);
-var formatter = new Vex.Flow.Formatter().
-joinVoices([voice]).format([voice], 290);
-voice.draw(context, stave);
-stave.setContext(context).draw();
+
+   var notes = [
+   // A quarter-note C.
+   new VF.StaveNote({
+     clef:"treble",
+       keys: ["c/4"],
+       duration: "w"
+   })
+ ];
+
+ var text = new Vex.Flow.TextNote({
+        text: "Render this",
+        font: {
+            family: "Arial",
+            size: 12,
+            weight: ""
+        },
+        duration: 'w'
+    })
+    .setLine(2)
+    .setStave(stave)
+    .setJustification(Vex.Flow.TextNote.Justification.LEFT)
+    .setContext(ctx);
+
+    var voice2 = new Vex.Flow.Voice({
+        num_beats: 4,
+        beat_value: 4,
+        resolution: Vex.Flow.RESOLUTION
+    });
+
+
+   var voice = new Vex.Flow.Voice({
+       num_beats: 4,
+       beat_value: 4,
+       resolution: Vex.Flow.RESOLUTION
+   });
+
+
+   // Add notes to voice
+   voice.addTickables(notes);
+   voice2.addTickables([text]);
+
+
+
+   // Format and justify the notes to 500 pixels
+   var formatter = new Vex.Flow.Formatter().
+   joinVoices([voice,voice2]).format([voice,voice2], 300);
+
+   // Render voice
+   voice.draw(ctx, stave);
+   text.setContext(ctx).draw();
+   stave.setContext(ctx).draw();

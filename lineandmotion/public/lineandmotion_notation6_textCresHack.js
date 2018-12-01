@@ -97,6 +97,8 @@ socket.on('newtime',
 //END OSC via websockets /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
+
+
 //VexFlow Notation /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 VF = Vex.Flow;
@@ -104,25 +106,89 @@ VF = Vex.Flow;
 var div = document.getElementById("nframe")
 var renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
 // Configure the rendering context.
-renderer.resize(100, 133);
+renderer.resize(290, 133);
 var context = renderer.getContext();
 context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
+
 // Create a stave of width 400 at position 10, 40 on the canvas.
 var stave = new VF.Stave(5, 5, 300);
 stave.addClef("treble");
+
+
 var notes = [
   new VF.StaveNote({
     clef: "treble",
     keys: ["c/5"],
     duration: "w"
   })
+  //addArticulation(0, new VF.Articulation("a>").setPosition(3) )
+  .addModifier(0, new Vex.Flow.Annotation("ppp")
+    .setFont('gonville', 16, 'italic')
+    .setVerticalJustification(Vex.Flow.Annotation.VerticalJustify.BOTTOM))
+
 ];
+var cres1 = [
+  new VF.GhostNote({
+    clef: "treble",
+    keys: ["c/5"],
+    duration: "8"
+  }),
+  new VF.Crescendo({
+    duration: "hd"
+  }).setLine(8.5).setHeight(18),
+  new VF.GhostNote({
+    clef: "treble",
+    keys: ["c/5"],
+    duration: "8"
+  })
+];
+
+var gh = new VF.GhostNote({
+  duration: "h"
+});
+var g8 = new VF.GhostNote({
+  duration: "8"
+});
+var gq = new VF.GhostNote({
+  duration: "q"
+});
+
+var text = new Vex.Flow.TextNote({
+       text: "fff",
+       font: {
+           family: "gonville",
+           size: 16,
+           weight: "italic"
+       },
+       duration: '8'
+   })
+   .setLine(9)
+   .setStave(stave)
+   .setJustification(Vex.Flow.TextNote.Justification.LEFT)
+   .setContext(context);
+
 var voice = new VF.Voice({
   num_beats: 4,
   beat_value: 4
 });
+
+var voice2 = new VF.Voice({
+  num_beats: 4,
+  beat_value: 4,
+  resolution: VF.RESOLUTION
+});
+
 voice.addTickables(notes);
+voice2.addTickables([gh, g8, text, gq]);
+
+//VF.Formatter.FormatAndDraw(context, stave, notes);
+VF.Formatter.FormatAndDraw(context, stave, cres1);
 var formatter = new Vex.Flow.Formatter().
-joinVoices([voice]).format([voice], 290);
+joinVoices([voice, voice2]).format([voice, voice2], 300);
+
+// Render voice
 voice.draw(context, stave);
+text.setContext(context).draw();
+
+// Connect it to the rendering context and draw!
 stave.setContext(context).draw();

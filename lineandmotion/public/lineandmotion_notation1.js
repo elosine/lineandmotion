@@ -97,32 +97,52 @@ socket.on('newtime',
 //END OSC via websockets /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
-//VexFlow Notation /////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////
 VF = Vex.Flow;
+
 // Create an SVG renderer and attach it to the DIV element named "nframe".
 var div = document.getElementById("nframe")
 var renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
+
 // Configure the rendering context.
-renderer.resize(100, 133);
+renderer.resize(133, 233);
 var context = renderer.getContext();
 context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
+
 // Create a stave of width 400 at position 10, 40 on the canvas.
-var stave = new VF.Stave(5, 5, 300);
+var stave = new VF.Stave(5, 10, 223);
 stave.addClef("treble");
+
+
+
 var notes = [
-  new VF.StaveNote({
-    clef: "treble",
-    keys: ["c/5"],
-    duration: "w"
-  })
+  // A quarter-note C.
+  new VF.StaveNote({clef: "treble", keys: ["c/5"], duration: "h" })
+  //addArticulation(0, new VF.Articulation("a>").setPosition(3) )
+  .addModifier(0, new Vex.Flow.Annotation("ppp")
+    .setFont('gonville', 16, 'italic')
+    .setVerticalJustification(Vex.Flow.Annotation.VerticalJustify.BOTTOM)),
+    new VF.TextNote({glyph: "p", duration: "16"}),
 ];
-var voice = new VF.Voice({
-  num_beats: 4,
-  beat_value: 4
-});
+
+
+
+
+
+
+
+
+
+
+VF.Formatter.FormatAndDraw(context, stave, notes);
+
+// Create a voice in 4/4 and add above notes
+var voice = new VF.Voice({num_beats: 3,  beat_value: 4});
 voice.addTickables(notes);
-var formatter = new Vex.Flow.Formatter().
-joinVoices([voice]).format([voice], 290);
+
+// Format and justify the notes to 400 pixels.
+var formatter = new VF.Formatter().joinVoices([voice]).format([voice], 400);
+
+// Render voice
 voice.draw(context, stave);
+// Connect it to the rendering context and draw!
 stave.setContext(context).draw();
