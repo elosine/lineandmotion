@@ -10,10 +10,13 @@ var pxPerSec = 50.0;
 var pxPerMs = pxPerSec / 1000;
 var test = 0;
 var pxCount_AtRate = 0;
+var frameClockMs = 0;
 var pxCount_cycle = 0;
+var svgNS = "http://www.w3.org/2000/svg";
 
 var currtick = -9999;
 var lasttick = 9999;
+var curves = [];
 
 var notationnow_svg = document.getElementById("notationnow");
 
@@ -25,6 +28,85 @@ function update(delta) {
 
 var goPxOffset = 300 + 15; //go cursor location + object (circle) radius
 function draw() {
+  drawTimelineObjs();
+  crvfollow(wholecrvpts);
+}
+
+var wholecrvpts = [];
+var myCircle2;
+
+function drawCrvFollow() {
+  myCircle2 = document.createElementNS(svgNS, "circle");
+  myCircle2.setAttributeNS(null, "cx", 0);
+  myCircle2.setAttributeNS(null, "cy", 130);
+  myCircle2.setAttributeNS(null, "r", 8);
+  myCircle2.setAttributeNS(null, "fill", "orange");
+  myCircle2.setAttributeNS(null, "stroke", "none");
+  notationnow_svg.appendChild(myCircle2);
+
+  for (var i = 0; i < curves[0][1].length; i++) {
+    var stptx1 = curves[0][1][i][1][0], //crv#, pathArray, path#, coordArray, : [ stptx, stpty, ctp1x, ctp1y, ctp2x, ctp2y, endptx, endpty ]
+      stpty1 = curves[0][1][i][1][1],
+      ctp1x1 = curves[0][1][i][1][2],
+      ctp1y1 = curves[0][1][i][1][3],
+      ctp2x1 = curves[0][1][i][1][4],
+      ctp2y1 = curves[0][1][i][1][5],
+      endptx1 = curves[0][1][i][1][6],
+      endpty1 = curves[0][1][i][1][7];
+    var mypts = bezierpts(stptx1, stpty1, ctp1x1, ctp1y1, ctp2x1, ctp2y1, endptx1, endpty1);
+    wholecrvpts = wholecrvpts.concat(mypts);
+  }
+}
+var speedPxPerMs = 33/1000;
+function crvfollow(crvpts) {
+  var tick = Math.round(frameClockMs*speedPxPerMs);
+  tick = tick % crvpts.length;
+
+  //increase 10% per cycle //not quite right 
+  if(tick == 0){
+    speedPxPerMs = speedPxPerMs*1.10;
+  }
+
+
+  myCircle2.setAttributeNS(null, "cx", crvpts[tick].x);
+  myCircle2.setAttributeNS(null, "cy", crvpts[tick].y);
+}
+
+// cubic bezier percent is 0-1
+function getBezierXY(t, sx, sy, cp1x, cp1y, cp2x, cp2y, ex, ey) {
+  return {
+    x: Math.pow(1 - t, 3) * sx + 3 * t * Math.pow(1 - t, 2) * cp1x +
+      3 * t * t * (1 - t) * cp2x + t * t * t * ex,
+    y: Math.pow(1 - t, 3) * sy + 3 * t * Math.pow(1 - t, 2) * cp1y +
+      3 * t * t * (1 - t) * cp2y + t * t * t * ey
+  };
+}
+
+//make array of x/y points
+function bezierpts(stptx, stpty, ctp1x, ctp1y, ctp2x, ctp2y, endptx, endpty) {
+  var pts = [];
+  var first = true;
+  var cfpt, oldx;
+  for (var i = 0; i < 1000; i++) {
+    var inc = 0.001 * i;
+    if (first) {
+      cfpt = getBezierXY(inc, stptx, stpty, ctp1x, ctp1y, ctp2x, ctp2y, endptx, endpty);
+      oldx = cfpt.x;
+      pts.push(cfpt);
+      first = false;
+    } else {
+      cfpt = getBezierXY(inc, stptx, stpty, ctp1x, ctp1y, ctp2x, ctp2y, endptx, endpty);
+      if ((cfpt.x - oldx) >= 1.0) {
+        pts.push(cfpt);
+        oldx = cfpt.x;
+      }
+    }
+
+  }
+  return pts;
+}
+
+function drawTimelineObjs() {
   if (aniElements.length > 0) {
     for (i = 0; i < aniElements.length; i++) {
       let tempdom = document.getElementById(aniElements[i][0]);
@@ -61,6 +143,7 @@ function mainLoop(timestamp) {
   while (delta >= timestep) {
     pxCount_AtRate += pxPerMs * timestep;
     pxCount_cycle = Math.round(pxCount_AtRate) % 1000;
+    frameClockMs += timestep;
     delta -= timestep;
   }
   draw();
@@ -95,7 +178,6 @@ socket.on('newtime',
 
 //MAKE SVG ELEMENTS /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-var svgNS = "http://www.w3.org/2000/svg";
 
 function mkcirc(id, gotime, cy) {
   var myCircle = document.createElementNS(svgNS, "circle"); //to create a circle. for rectangle use "rectangle"
@@ -115,46 +197,32 @@ function removeElement(elementId) {
   var element = document.getElementById(elementId);
   element.parentNode.removeChild(element);
 }
-
 //END MAKE SVG ELEMENTS /////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
-
 
 //CURVES /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 //<path d="M9, 12 C93, 7, 43, 271, 178, 89" stroke="#99ff00" stroke-width="5"/>
 
-var path = document.createElementNS(svgNS, 'path');
-var path2 = document.createElementNS(svgNS, 'path');
-path.setAttribute('stroke', "#99ff00");
-path.setAttribute('stroke-width', "5");
-path2.setAttribute('stroke', "#99ff00");
-path2.setAttribute('stroke-width', "5");
+drawCrv001(notationnow_svg, 'crv001_1_', 0, 0, 300, 130, "#99ff00", "5");
 
-var d = "M9, 125 C56, 228, 88, 4, 167, 92";
-var d2 = "M167, 92 C255, 190, 249, 70, 317, 13";
-path.setAttribute('d', d);
-path2.setAttribute('d', d2);
-notationnow_svg.appendChild(path);
-notationnow_svg.appendChild(path2);
-
-drawShape(notationnow_svg, 315, 5, 173, 130, "#99ff00", "5");
-
-function drawShape(ctx, x, y, w, h, clr, strw) {
+// Curve Functions /////////////////////////////////////////////////////////
+function drawCrv001(ctx, id, x, y, w, h, clr, strw) {
   var ns = "http://www.w3.org/2000/svg";
-  var d = [];
-  var path = [];
   var stptx, stpty, ctp1x, ctp1y, ctp2x, ctp2y, endptx, endpty;
+  path = [];
+  var idix = 0;
 
-  stptx = ((0.0117 * w) + x);
-  stpty = ((0.9444 * h) + y);
+  stptx = ((0.0 * w) + x);
+  stpty = ((1.0 * h) + y);
   ctp1x = ((0.1283 * w) + x);
   ctp1y = ((0.9867 * h) + y);
   ctp2x = ((0.0302 * w) + x);
   ctp2y = ((0.2583 * h) + y);
   endptx = ((0.1567 * w) + x);
   endpty = ((0.3089 * h) + y);
-  d.push('M' + stptx + ', ' + stpty + ' C' + ctp1x + ', ' + ctp1y + ', ' + ctp2x + ', ' + ctp2y + ', ' + endptx + ', ' + endpty);
+  path.push([id + idix, [stptx, stpty, ctp1x, ctp1y, ctp2x, ctp2y, endptx, endpty], 'M' + stptx + ', ' + stpty + ' C' + ctp1x + ', ' + ctp1y + ', ' + ctp2x + ', ' + ctp2y + ', ' + endptx + ', ' + endpty]);
+  idix++;
   stptx = ((0.1567 * w) + x);
   stpty = ((0.3089 * h) + y);
   ctp1x = ((0.2233 * w) + x);
@@ -163,7 +231,8 @@ function drawShape(ctx, x, y, w, h, clr, strw) {
   ctp2y = ((0.6715 * h) + y);
   endptx = ((0.3750 * w) + x);
   endpty = ((0.6422 * h) + y);
-  d.push('M' + stptx + ', ' + stpty + ' C' + ctp1x + ', ' + ctp1y + ', ' + ctp2x + ', ' + ctp2y + ', ' + endptx + ', ' + endpty);
+  path.push([id + idix, [stptx, stpty, ctp1x, ctp1y, ctp2x, ctp2y, endptx, endpty], 'M' + stptx + ', ' + stpty + ' C' + ctp1x + ', ' + ctp1y + ', ' + ctp2x + ', ' + ctp2y + ', ' + endptx + ', ' + endpty]);
+  idix++;
   stptx = ((0.3750 * w) + x);
   stpty = ((0.6422 * h) + y);
   ctp1x = ((0.5350 * w) + x);
@@ -172,7 +241,8 @@ function drawShape(ctx, x, y, w, h, clr, strw) {
   ctp2y = ((-0.0178 * h) + y);
   endptx = ((0.5900 * w) + x);
   endpty = ((0.0178 * h) + y);
-  d.push('M' + stptx + ', ' + stpty + ' C' + ctp1x + ', ' + ctp1y + ', ' + ctp2x + ', ' + ctp2y + ', ' + endptx + ', ' + endpty);
+  path.push([id + idix, [stptx, stpty, ctp1x, ctp1y, ctp2x, ctp2y, endptx, endpty], 'M' + stptx + ', ' + stpty + ' C' + ctp1x + ', ' + ctp1y + ', ' + ctp2x + ', ' + ctp2y + ', ' + endptx + ', ' + endpty]);
+  idix++;
   stptx = ((0.5900 * w) + x);
   stpty = ((0.0178 * h) + y);
   ctp1x = ((0.6963 * w) + x);
@@ -181,23 +251,28 @@ function drawShape(ctx, x, y, w, h, clr, strw) {
   ctp2y = ((0.4911 * h) + y);
   endptx = ((0.8583 * w) + x);
   endpty = ((0.4022 * h) + y);
-  d.push('M' + stptx + ', ' + stpty + ' C' + ctp1x + ', ' + ctp1y + ', ' + ctp2x + ', ' + ctp2y + ', ' + endptx + ', ' + endpty);
+  path.push([id + idix, [stptx, stpty, ctp1x, ctp1y, ctp2x, ctp2y, endptx, endpty], 'M' + stptx + ', ' + stpty + ' C' + ctp1x + ', ' + ctp1y + ', ' + ctp2x + ', ' + ctp2y + ', ' + endptx + ', ' + endpty]);
+  idix++;
   stptx = ((0.8583 * w) + x);
   stpty = ((0.4022 * h) + y);
   ctp1x = ((0.9528 * w) + x);
   ctp1y = ((0.3576 * h) + y);
   ctp2x = ((0.8450 * w) + x);
   ctp2y = ((0.9778 * h) + y);
-  endptx = ((0.9767 * w) + x);
-  endpty = ((0.8956 * h) + y);
-  d.push('M' + stptx + ', ' + stpty + ' C' + ctp1x + ', ' + ctp1y + ', ' + ctp2x + ', ' + ctp2y + ', ' + endptx + ', ' + endpty);
-  for (i = 0; i < d.length; i++) {
+  endptx = ((1.0 * w) + x);
+  endpty = ((1.0 * h) + y);
+  path.push([id + idix, [stptx, stpty, ctp1x, ctp1y, ctp2x, ctp2y, endptx, endpty], 'M' + stptx + ', ' + stpty + ' C' + ctp1x + ', ' + ctp1y + ', ' + ctp2x + ', ' + ctp2y + ', ' + endptx + ', ' + endpty]);
+  idix++;
+  for (i = 0; i < path.length; i++) {
     var pathtemp = document.createElementNS(svgNS, "path");
+    pathtemp.setAttribute('id', path[i][0]);
     pathtemp.setAttribute('stroke', clr);
     pathtemp.setAttribute('stroke-width', strw);
-    pathtemp.setAttribute('d', d[i]);
+    pathtemp.setAttribute('d', path[i][2]);
     ctx.appendChild(pathtemp);
   }
+  curves.push([id, path]);
+  drawCrvFollow();
 }
 //CURVES /////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
