@@ -41,7 +41,7 @@ function setup() {
   csrmain.setAttributeNS(null, "y1", 5);
   csrmain.setAttributeNS(null, "x2", l1x);
   csrmain.setAttributeNS(null, "y2", 75);
-  csrmain.setAttributeNS(null, "stroke-width", 9);
+  csrmain.setAttributeNS(null, "stroke-width", 8);
   csrmain.setAttributeNS(null, "stroke-linecap", 'round');
   csrmain.setAttributeNS(null, "stroke", 'rgb(243, 243, 21)');
   csrmain.setAttributeNS(null, 'filter', 'url(#neonyellow)');
@@ -61,7 +61,7 @@ function setup() {
   goline.setAttributeNS(null, "y1", 5);
   goline.setAttributeNS(null, "x2", 200);
   goline.setAttributeNS(null, "y2", 75);
-  goline.setAttributeNS(null, "stroke-width", 9);
+  goline.setAttributeNS(null, "stroke-width", 8);
   goline.setAttributeNS(null, "stroke-linecap", 'round');
   goline.setAttributeNS(null, "stroke", 'rgb(0, 249, 255)');
   goline.setAttributeNS(null, 'filter', 'url(#neonblue)');

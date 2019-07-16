@@ -39,5 +39,5 @@ var ctx = canvas.getContext('2d'),
   }
 
 //plot( function(x) {return Math.sin(x) + Math.sin(x * 2);}, [0, Math.PI * 2, -2, 2] );
-plot( function(x) {return Math.sin(x) + Math.sin(x * 2);}, [rads(-305), rads(55), -2, 2] );
-//plot( function(x) {return Math.pow(x, 3);}, [0, 1, 0, 1] );
+//plot( function(x) {return Math.sin(x) + Math.sin(x * 2);}, [rads(-305), rads(55), -2, 2] );
+plot( function(x) {return Math.pow(x, 3);}, [0, 1, 0, 1] );
