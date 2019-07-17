@@ -11,12 +11,12 @@ var timestep = 1000.0 / frmRate;
 var framect = 0;
 var pieceClock = 0.0;
 var clockadj = 0.0;
-var timeToGo = 3.0;
+var timeToGo = 8.0;
 var pxPerSec = 60.0;
 var pxPerMs = pxPerSec / 1000.0;
 var startPx = timeToGo * pxPerSec;
 var goOffset = 250.0;
-var durfrm_csr = Math.ceil((timeToGo * 1000.0) / timestep) + 2; //?+2frames
+var durframes = Math.ceil((timeToGo * 1000.0) / timestep) + 2; //?+2frames
 l1x = startPx + goOffset;
 var done = true;
 
@@ -24,7 +24,6 @@ var done = true;
 var svgtl = document.getElementById("timeline_svg");
 var svgicn = document.getElementById("icon_svg");
 var svgEventAction = document.getElementById("eventAction_svg");
-var svgEventAction_bbox = svgEventAction.getBoundingClientRect();
 var bg = document.createElementNS(svgNS, "rect");
 var blendgroup = document.createElementNS(svgNS, 'g');
 blendgroup.setAttribute('style', "isolation: isolate");
@@ -34,37 +33,23 @@ var ictusicon = document.createElementNS(svgNS, 'image');
 var ictusorb = document.createElementNS(svgNS, 'circle');
 
 //ICTUS ORB /////////////////////////////////////////////
-var ioipos = 23;
-
 var io = {
-  pos: ioipos,
-  vel: 3,
-  radius: 16, // 1px = 1cm
-};
-
-var g = 8.81; // m / s^2
-var acc = 1.26;
-var decel = 0.82;
-var godown = true;
-
-var durframes = function(g, acc, ivel, ipos, fpos) {
-  var frct = 0;
-  var pos = ipos;
-  var lg = g;
-  var vel = ivel;
-  while (pos <= fpos) {
-    lg *= acc;
-    vel += lg * (1.0 / frmRate);
-    pos += vel * (1.0 / frmRate) * 100;
-    frct++;
-  }
-
-  return frct;
+  iypos: 17,
+  ypos: 17,
+  r: 16,
+  fac: 0
 }
-var dfr;
+var godown = true;
 //SET-UP ///////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 function setup() {
+  //Background////////////////////////////
+  bg.setAttributeNS(null, "fill", 'black');
+  bg.setAttributeNS(null, "rx", 0);
+  bg.setAttributeNS(null, "ry", 0);
+  bg.setAttributeNS(null, "width", 1000);
+  bg.setAttributeNS(null, "height", 100);
+  // svgtl.appendChild(bg);
   //MAIN Cursor //////////////////////////
   csrmain.setAttributeNS(null, "id", 'csrmain');
   csrmain.setAttributeNS(null, "x1", l1x);
@@ -102,12 +87,9 @@ function setup() {
   //Ictusorb////////////////////////////
   ictusorb.setAttributeNS(null, "fill", 'rgb(254,102,1)');
   ictusorb.setAttributeNS(null, "cx", goOffset);
-  ictusorb.setAttributeNS(null, "cy", ioipos);
-  ictusorb.setAttributeNS(null, "r", io.radius);
-  ictusorb.setAttributeNS(null, 'filter', 'url(#neonorange)');
+  ictusorb.setAttributeNS(null, "cy", io.iypos);
+  ictusorb.setAttributeNS(null, "r", io.r);
   svgEventAction.appendChild(ictusorb);
-  dfr = durframes(g, acc, io.vel, io.pos, (svgEventAction_bbox.height - io.radius));
-  console.log(dfr);
 }
 
 setup();
@@ -127,7 +109,7 @@ function mainLoop(timestamp) {
 // Start things off
 requestAnimationFrame(mainLoop);
 
-var startorb = false;
+
 //UPDATE ///////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 function update(timestep) {
@@ -136,12 +118,11 @@ function update(timestep) {
   pieceClock += timestep;
   pieceClock = pieceClock - clockadj;
   var numPx = pxPerMs * timestep;
-  if (l1x >= 0) {
+  if (l1x >= goOffset) {
     l1x = l1x - numPx;
   } else {
     if (done) {
       done = false;
-      console.log("csr:" + framect);
     }
   }
   //Main Cursor////////////////////////////
@@ -150,37 +131,51 @@ function update(timestep) {
   //Ictus Icon////////////////////////////
   ictusicon.setAttributeNS(null, 'x', l1x - 21);
   //Ictus Orb////////////////////////////
-  if(framect > (durfrm_csr - dfr)) startorb = true;
-  if (startorb) {
-    if (godown) {
-      g *= acc;
-      io.vel += g * (1.0 / frmRate);
-      io.pos += io.vel * (1.0 / frmRate) * 100;
-      ictusorb.setAttributeNS(null, 'cy', io.pos);
-    } else {
-      g *= decel;
-      io.vel -= g * (1.0 / frmRate);
-      io.vel = Math.abs(io.vel);
-      io.pos -= io.vel * (1.0 / frmRate) * 100;
-      io.pos = Math.max(ioipos, io.pos);
-      ictusorb.setAttributeNS(null, 'cy', io.pos);
-    }
+  //xinc = xdurSec/frmRate
+  x += xinc;
+  var crv = Math.pow(x, 4);
+  if (!done) {
+    io.ypos = io.iypos + ((220 - io.r) * crv);
+  }
+  ictusorb.setAttributeNS(null, "cy", io.ypos);
 
-    if (io.pos > svgEventAction_bbox.height - io.radius) {
-      godown = false;
-      console.log("bb:" + framect);
-    }
+  if (io.ypos >= (220 - io.r)) {
+    done = true;
+    io.ypos = 220 - io.r;
   }
 
 }
+var done = false;
+var x = 0;
+//xinc = xdurSec/frmRate
+var xinc = 1.0 / (frmRate*0.4);
 //DRAW /////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 var statusbar = document.getElementById('statusbar');
 
 function draw() {
+  // svgtl.removeChild(bg);
+  // blendgroup.removeChild(goline);
+  // svgicn.removeChild(ictusicon);
+  // blendgroup.removeChild(csrmain);
+  // svgtl.removeChild(blendgroup);
+  // svgEventAction.removeChild(ictusorb);
+
+  //Background////////////////////////////
+  // svgtl.appendChild(bg);
   //Status Bar ///////////////////////////
   var sb = false;
   if (sb) {
     statusbar.textContent = "Time: " + (pieceClock / 1000).toFixed(2) + " " + "Px: " + l1x.toFixed(1) + " " + "Clock: " + (Date.now() / 1000).toFixed(2);
   }
+  //GO Line ///////////////////////////////
+  // blendgroup.appendChild(goline);
+  //Ictus Icon/////////////////////////////
+  // svgicn.appendChild(ictusicon);
+  //Main Cursor////////////////////////////
+  // blendgroup.appendChild(csrmain);
+  //Blend Group////////////////////////////
+  // svgtl.appendChild(blendgroup);
+  //Ictus Orb////////////////////////////
+  // svgEventAction.appendChild(ictusorb);
 }
