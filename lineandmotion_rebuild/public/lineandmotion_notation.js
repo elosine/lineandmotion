@@ -61,6 +61,88 @@ var durframes = function(g, acc, ivel, ipos, fpos) {
 
   return frct;
 }
+
+//SVG CURVE //////////////////////////////////////////////////////
+//function to convert degrees to radians
+function rads(deg) {
+  return (deg * Math.PI) / 180;
+}
+//plotSVGcurve function returns an array with:
+//[0] A long string to put in the SVG path i.e. d = M100 100 L101 49...
+//[1] A dictionary of x/y coordinates plotSVGcurve[1].x plotSVGcurve[1].y
+var plotSVGcurve = function plot(fn, range, ix, iy, width, height) {
+  var coord = [];
+  var pathstring;
+  var widthScale = (width / (range[1] - range[0]));
+  var heightScale = (height / (range[3] - range[2]));
+  var first = true;
+
+  for (var x = 0; x < width; x++) {
+    var xFnVal = (x / widthScale) - range[0];
+    var yGVal = (fn(xFnVal) - range[2]) * heightScale;
+
+    yGVal = height - yGVal; // 0,0 is top-left
+
+    if (first) {
+      first = false;
+      var xtemp = x+ix;
+      var ytemp = yGVal+iy;
+      coord.push( {
+        x: xtemp,
+        y: ytemp
+      } );
+      pathstring = "M" + xtemp + " " + ytemp;
+    } else {
+      var xtemp = x+ix;
+      var ytemp = yGVal+iy;
+      coord.push({
+        x: xtemp,
+        y: ytemp
+      });
+      pathstring = pathstring.concat( " L" + xtemp + " " + ytemp );
+    }
+  }
+  var data = [pathstring, coord];
+return data
+}
+
+//The dictionary crvs contains several functions
+//representing different curves
+var crvs = {
+  pow: {
+    fun: function(x) {
+      return Math.pow(x, 4.5)
+    },
+    range: [0, 1, 0, 1]
+  },
+  sin2: {
+    fun: function(x) {return Math.sin(x) + Math.sin(x * 2);},
+    range: [0, Math.PI * 2, -2, 2]
+  },
+  sin: {
+    fun: function(x) {return Math.sin(x) + Math.sin(x * 2);},
+    range: [rads(-305), rads(55), -2, 2]
+  }
+
+}
+var crvdata = plotSVGcurve(crvs.pow.fun, crvs.pow.range, 20, ioipos, goOffset-20, svgEventAction_bbox.height-ioipos-io.radius);
+var crv = document.createElementNS(svgNS, 'path');
+crv.setAttributeNS(null, 'stroke', 'rgb(153,255,0)');
+crv.setAttributeNS(null, 'stroke-width', '6');
+crv.setAttributeNS(null, "stroke-linecap", 'round');
+crv.setAttributeNS(null, 'fill', 'none');
+crv.setAttributeNS(null, 'd', crvdata[0]);
+svgEventAction.appendChild(crv);
+
+var ball = document.createElementNS(svgNS, 'circle');
+ball.setAttributeNS(null, 'fill', 'rgb(255,255,0)');
+ball.setAttributeNS(null, 'r', '13');
+ball.setAttributeNS(null, 'cx', crvdata[1][100].x);
+ball.setAttributeNS(null, 'cy', crvdata[1][100].y);
+svgEventAction.appendChild(ball);
+
+
+
 var dfr;
 //SET-UP ///////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
