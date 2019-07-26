@@ -40,7 +40,54 @@ goline.setAttributeNS(null, 'filter', 'url(#neonblue)');
 goline.setAttributeNS(null, 'style', "mix-blend-mode: multiply");
 blendgroup.appendChild(goline);
 //BB //////////////////////////////////////////
-var bb1 = new Bb(0, 3, 16, 0);
+var bb1 = new Bb(0, 3, 16, 0, 0);
+//FUNCTIONS //////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+//Function to convert degrees to radians ///////////
+function rads(deg) {
+  return (deg * Math.PI) / 180;
+}
+
+//plotSVGcurve function returns an array with:
+//[0] A long string to put in the SVG path i.e. d = M100 100 L101 49...
+//[1] A dictionary of x/y coordinates plotSVGcurve[1].x plotSVGcurve[1].y
+//[2] Length of the array
+function plot(fn, range, ix, iy, width, height) {
+  var coord = [];
+  var pathstring;
+  var widthScale = (width / (range[1] - range[0]));
+  var heightScale = (height / (range[3] - range[2]));
+  var first = true;
+
+  for (var x = 0; x < width; x++) {
+    var xFnVal = (x / widthScale) - range[0];
+    var yGVal = (fn(xFnVal) - range[2]) * heightScale;
+
+    yGVal = height - yGVal; // 0,0 is top-left
+
+    if (first) {
+      first = false;
+      var xtemp = x + ix;
+      var ytemp = yGVal + iy;
+      coord.push({
+        x: xtemp,
+        y: ytemp
+      });
+      pathstring = "M" + xtemp + " " + ytemp;
+    } else {
+      var xtemp = x + ix;
+      var ytemp = yGVal + iy;
+      coord.push({
+        x: xtemp,
+        y: ytemp
+      });
+      pathstring = pathstring.concat(" L" + xtemp + " " + ytemp);
+    }
+  }
+  var data = [pathstring, coord, coord.length];
+  return data
+}
 //DRAW ///////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 function draw() {
