@@ -1,0 +1,38 @@
+body {
+  background-color: #708090;
+}
+
+#tlicon_svg {
+  background-color: black;
+  position: absolute;
+  top: 15px;
+  height: 54px;
+  left: 15px;
+  width: calc(100% - 30px);
+}
+
+#timeline_svg {
+  background-color: black;
+  position: absolute;
+  top: 71px;
+  height: 80px;
+  left: 15px;
+  width: calc(100% - 30px);
+}
+
+#eventAction_svg {
+  background-color: black;
+  position: absolute;
+  top: 160px;
+  height: 240px;
+  left: 15px;
+  width: calc(100% - 30px);
+}
+
+#statusbar {
+  background-color: rgb(169, 169, 169);
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 20px;
+}

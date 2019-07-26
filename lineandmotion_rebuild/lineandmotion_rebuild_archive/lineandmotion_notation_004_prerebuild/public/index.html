@@ -5,23 +5,56 @@
   <meta charset="utf-8">
   <title>Line & Motion</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-  <link rel="stylesheet" type="text/css" href="lmstylesheet.css">
 </head>
 
-<body>
-  <!-- TIMELINE ICON svg canvas element -->
-  <svg id="tlicon_svg" xmlns="http://www.w3.org/2000/svg"></svg>
-  <!-- TIMELINE svg canvas element -->
-  <svg id="timeline_svg" xmlns="http://www.w3.org/2000/svg"></svg>
-  <!-- EVENTACTION svg canvas element -->
-  <svg id="eventAction_svg" xmlns="http://www.w3.org/2000/svg"></svg>
-  <!-- STATUS BAR -->
-  <div id="statusbar"> </div>
-  <!-- FILTER DEFS IN svg canvas element -->
-  <svg id="svgfilters" xmlns="http://www.w3.org/2000/svg">
-    <defs>
+<style>
+  * {
+    font-family: 'Lato';
+  }
 
-      <!-- Filter: neongreen rgb(153, 255, 0) -->
+  #icon_svg {
+    background-color: black;
+    position: absolute;
+    top: 15px;
+    height: 54px;
+    left: 15px;
+    width: calc(100% - 30px);
+  }
+
+  #timeline_svg {
+    background-color: black;
+    position: absolute;
+    top: 71px;
+    height: 80px;
+    left: 15px;
+    width: calc(100% - 30px);
+  }
+
+  #eventAction_svg {
+    background-color: black;
+    position: absolute;
+    top: 160px;
+    height: 240px;
+    left: 15px;
+    width: calc(100% - 30px);
+  }
+
+  #statusbar {
+    background-color: rgb(169, 169, 169);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 20px;
+  }
+</style>
+
+<body bgcolor="#708090">
+  <!-- ICON svg canvas element -->
+  <svg id="icon_svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  <!-- TIMELINE svg canvas element -->
+  <svg id="timeline_svg" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Filter: neongreen -->
       <filter id="neongreen" filterUnits="userSpaceOnUse" x="-50%" y="-50%" width="200%" height="200%">
         <!-- blur the text at different levels-->
         <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur5" />
@@ -42,10 +75,10 @@
         </feMerge>
         <!-- recolour the merged blurs red-->
         <feColorMatrix result="limegreen-blur" in="blur-merged" type="matrix" values="
-                                 0.6 0 0 0 0
-                                 0 1 0 0 0
-                                 0 0 0 0 0
-                                 0 0 0 1 0" />
+                               0.6 0 0 0 0
+                               0 1 0 0 0
+                               0 0 0 0 0
+                               0 0 0 1 0" />
         <feMerge>
           <feMergeNode in="limegreen-blur" /> <!-- largest blurs coloured red -->
           <feMergeNode in="blur5" /> <!-- smallest blur left white -->
@@ -53,7 +86,7 @@
         </feMerge>
       </filter>
 
-      <!-- Filter: neonyellow rgb(243, 243, 21) -->
+      <!-- Filter: neonyellow -->
       <filter id="neonyellow" filterUnits="userSpaceOnUse" x="-50%" y="-50%" width="200%" height="200%">
         <!-- blur the text at different levels-->
         <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur5" />
@@ -85,7 +118,7 @@
         </feMerge>
       </filter>
 
-      <!-- Filter: neonblue rgb(0, 249, 255) -->
+      <!-- Filter: neonblue -->
       <filter id="neonblue" filterUnits="userSpaceOnUse" x="-50%" y="-50%" width="200%" height="200%">
         <!-- blur the text at different levels-->
         <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur5" />
@@ -117,7 +150,108 @@
         </feMerge>
       </filter>
 
-      <!-- Filter: neonorange rgb(254,102,1) -->
+    </defs>
+  </svg>
+  <!-- PreEvent svg canvas element -->
+  <svg id="eventAction_svg" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Filter: neongreen -->
+      <filter id="neongreen" filterUnits="userSpaceOnUse" x="-50%" y="-50%" width="200%" height="200%">
+        <!-- blur the text at different levels-->
+        <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur5" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur10" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="blur20" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="30" result="blur30" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="50" result="blur50" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="60" result="blur60" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="70" result="blur70" />
+        <!-- merge all the blurs except for the first one -->
+        <feMerge result="blur-merged">
+          <feMergeNode in="blur10" />
+          <feMergeNode in="blur20" />
+          <feMergeNode in="blur30" />
+          <feMergeNode in="blur50" />
+          <feMergeNode in="blur60" />
+          <feMergeNode in="blur70" />
+        </feMerge>
+        <!-- recolour the merged blurs red-->
+        <feColorMatrix result="limegreen-blur" in="blur-merged" type="matrix" values="
+                               0.6 0 0 0 0
+                               0 1 0 0 0
+                               0 0 0 0 0
+                               0 0 0 1 0" />
+        <feMerge>
+          <feMergeNode in="limegreen-blur" /> <!-- largest blurs coloured red -->
+          <feMergeNode in="blur5" /> <!-- smallest blur left white -->
+          <feMergeNode in="SourceGraphic" /> <!-- original white text -->
+        </feMerge>
+      </filter>
+
+      <!-- Filter: neonyellow -->
+      <filter id="neonyellow" filterUnits="userSpaceOnUse" x="-50%" y="-50%" width="200%" height="200%">
+        <!-- blur the text at different levels-->
+        <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur5" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur10" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="blur20" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="30" result="blur30" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="50" result="blur50" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="60" result="blur60" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="70" result="blur70" />
+        <!-- merge all the blurs except for the first one -->
+        <feMerge result="blur-merged">
+          <feMergeNode in="blur10" />
+          <feMergeNode in="blur20" />
+          <feMergeNode in="blur30" />
+          <feMergeNode in="blur50" />
+          <feMergeNode in="blur60" />
+          <feMergeNode in="blur70" />
+        </feMerge>
+        <!-- recolour the merged blurs red-->
+        <feColorMatrix result="coloredblur" in="blur-merged" type="matrix" values="
+                                 0.95 0 0 0 0
+                                 0 0.95 0 0 0
+                                 0 0 0.08 0 0
+                                 0 0 0 1 0" />
+        <feMerge>
+          <feMergeNode in="coloredblur" /> <!-- largest blurs coloured red -->
+          <feMergeNode in="blur5" /> <!-- smallest blur left white -->
+          <feMergeNode in="SourceGraphic" /> <!-- original white text -->
+        </feMerge>
+      </filter>
+
+      <!-- Filter: neonblue -->
+      <filter id="neonblue" filterUnits="userSpaceOnUse" x="-50%" y="-50%" width="200%" height="200%">
+        <!-- blur the text at different levels-->
+        <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur5" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur10" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="blur20" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="30" result="blur30" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="50" result="blur50" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="60" result="blur60" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="70" result="blur70" />
+        <!-- merge all the blurs except for the first one -->
+        <feMerge result="blur-merged">
+          <feMergeNode in="blur10" />
+          <feMergeNode in="blur20" />
+          <feMergeNode in="blur30" />
+          <feMergeNode in="blur50" />
+          <feMergeNode in="blur60" />
+          <feMergeNode in="blur70" />
+        </feMerge>
+        <!-- recolour the merged blurs red-->
+        <feColorMatrix result="coloredblur" in="blur-merged" type="matrix" values="
+                                 0 0 0 0 0
+                                 0 0.98 0 0 0
+                                 0 0 1 0 0
+                                 0 0 0 1 0" />
+        <feMerge>
+          <feMergeNode in="coloredblur" /> <!-- largest blurs coloured red -->
+          <feMergeNode in="blur5" /> <!-- smallest blur left white -->
+          <feMergeNode in="SourceGraphic" /> <!-- original white text -->
+        </feMerge>
+      </filter>
+
+      <!-- Filter: neonorange -->
       <filter id="neonorange" filterUnits="userSpaceOnUse" x="-50%" y="-50%" width="200%" height="200%">
         <!-- blur the text at different levels-->
         <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur5" />
@@ -148,10 +282,13 @@
           <feMergeNode in="SourceGraphic" /> <!-- original white text -->
         </feMerge>
       </filter>
+
     </defs>
   </svg>
+
+  <!-- STATUS BAR -->
+  <div id="statusbar"> </div>
   <!-- SCRIPTS AFTER DOM ELEMENTS -->
-  <script src="bb.js"></script>
   <script src="lineandmotion_notation.js"></script>
 </body>
 
