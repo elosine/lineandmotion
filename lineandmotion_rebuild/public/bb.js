@@ -22,42 +22,46 @@ class Bb {
 
     switch (usalgo) {
       case 0:
+        var crvw = 180;
         this.crvdata = plot(
           function(x) {
-            return Math.pow(x, 7)
+            return Math.pow(x, 3.3)
           },
           [0, 1, 0, 1],
-          50,
+          goOffset - crvw,
           this.iy,
-          goOffset - 50, ea_height - this.iy - 15
+          crvw, ea_height - this.iy
         );
-        this.crvdur = 0.55;
+        this.crvdur = 0.7;
         this.crvdurpx = this.crvdata[2];
         this.crvnumframes = frmRate * this.crvdur;
         this.crvinc = this.crvdurpx / this.crvnumframes;
         this.crvi = 0;
+        this.crvi2 = 0;
         this.makecrv = true;
+        this.upswingpause = 0.14;
         break;
+
       default:
+        var crvw = 180;
         this.crvdata = plot(
           function(x) {
-            return Math.pow(x, 7)
+            return Math.pow(x, 3)
           },
           [0, 1, 0, 1],
-          50,
+          goOffset - crvw,
           this.iy,
-          goOffset - 50, ea_height - this.iy - 15
+          crvw, ea_height - this.iy
         );
         this.crvdur = 0.55;
         this.crvdurpx = this.crvdata[2];
         this.crvnumframes = frmRate * this.crvdur;
         this.crvinc = this.crvdurpx / this.crvnumframes;
         this.crvi = 0;
+        this.crvi2 = 0;
         this.makecrv = true;
         break;
     }
-
-
 
     this.godown = true;
     this.g = this.ig;
@@ -65,6 +69,8 @@ class Bb {
     this.pos = this.iy;
     this.dfr = this.durframes();
     this.makeball = true;
+    this.startupswing = false;
+    this.tl = new Tlevent(this.id, [calculate initial x here])
   }
 
   durframes() {
@@ -82,7 +88,8 @@ class Bb {
   }
 
   drop() {
-    if (framect > (this.goframe - this.dfr - this.crvnumframes)) {
+    if (framect > (this.goframe - this.dfr - this.crvnumframes - (this.upswingpause * frmRate))) {
+
       if (this.makecrv) {
         //MAKE UPSWING CURVE /////////////
         this.uscrv = document.createElementNS(svgNS, 'path');
@@ -94,6 +101,16 @@ class Bb {
         this.uscrv.setAttributeNS(null, 'filter', 'url(#neonorange)');
         this.uscrv.setAttributeNS(null, 'd', this.crvdata[0]);
         svgEventAction.appendChild(this.uscrv);
+        this.crvline = document.createElementNS(svgNS, 'line');
+        this.crvline.setAttributeNS(null, 'stroke', 'rgb(254,102,1)');
+        this.crvline.setAttributeNS(null, 'stroke-width', '6');
+        this.crvline.setAttributeNS(null, "stroke-linecap", 'round');
+        this.crvline.setAttributeNS(null, 'filter', 'url(#neonorange)');
+        this.crvline.setAttributeNS(null, 'x1', goOffset);
+        this.crvline.setAttributeNS(null, 'y1', this.iy);
+        this.crvline.setAttributeNS(null, 'x2', goOffset);
+        this.crvline.setAttributeNS(null, 'y2', this.zy);
+        svgEventAction.appendChild(this.crvline);
         //MAKE CURVE FOLLOWER /////////////
         this.cf = document.createElementNS(svgNS, 'circle');
         this.cf.setAttributeNS(null, 'id', 'cf' + this.id);
@@ -104,8 +121,25 @@ class Bb {
         this.cf.setAttributeNS(null, 'cy', this.crvdata[1][0].y);
         svgEventAction.appendChild(this.cf);
         this.makecrv = false;
+        this.startupswing = true;
+      }
+
+      //Upswing for Ictus////////////////////////////
+      if (this.startupswing) {
+        if (this.crvi2 < this.crvdata[2]) {
+          this.cf.setAttributeNS(null, 'cx', this.crvdata[1][this.crvi2].x);
+          this.cf.setAttributeNS(null, 'cy', this.crvdata[1][this.crvi2].y);
+          this.crvi++;
+          this.crvi2 = Math.floor(this.crvi * this.crvinc);
+          console.log(this.crvdata[2]);
+        } else {
+          //   // this.cf.setAttributeNS(null, 'cx', this.crvdata[1][this.crvdata[2] - 1].x);
+          //   // this.cf.setAttributeNS(null, 'cy', this.crvdata[1][this.crvdata[2] - 1].y);
+        }
+        //  startupswing = false;
       }
     }
+
 
     if (framect > (this.goframe - this.dfr)) {
       if (this.makeball) {
@@ -119,6 +153,8 @@ class Bb {
         this.bbal.setAttributeNS(null, 'filter', 'url(#neonorange)');
         svgEventAction.appendChild(this.bbal);
         this.makeball = false;
+        var cftorem = document.getElementById('cf' + this.id);
+        cftorem.parentNode.removeChild(cftorem);
       }
       if (this.godown) {
         this.g *= this.acc;
