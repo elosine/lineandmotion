@@ -1,7 +1,8 @@
 class Bb {
   constructor(id, gotime, r, bbalgo, usalgo) {
     this.id = id;
-    this.goframe = gotime * frmRate;
+    this.gotime = gotime;
+    this.goframe = this.gotime * frmRate;
     this.r = r;
     this.iy = r + 5;
     this.zy = ea_height - this.r;
@@ -70,7 +71,7 @@ class Bb {
     this.dfr = this.durframes();
     this.makeball = true;
     this.startupswing = false;
-    this.tl = new Tlevent(this.id, [calculate initial x here])
+    this.tlcsr = new Tlcsr(this.id + "bb", this.gotime);
   }
 
   durframes() {
@@ -88,6 +89,7 @@ class Bb {
   }
 
   drop() {
+    this.tlcsr.move();
     if (framect > (this.goframe - this.dfr - this.crvnumframes - (this.upswingpause * frmRate))) {
 
       if (this.makecrv) {
@@ -131,7 +133,6 @@ class Bb {
           this.cf.setAttributeNS(null, 'cy', this.crvdata[1][this.crvi2].y);
           this.crvi++;
           this.crvi2 = Math.floor(this.crvi * this.crvinc);
-          console.log(this.crvdata[2]);
         } else {
           //   // this.cf.setAttributeNS(null, 'cx', this.crvdata[1][this.crvdata[2] - 1].x);
           //   // this.cf.setAttributeNS(null, 'cy', this.crvdata[1][this.crvdata[2] - 1].y);
@@ -172,7 +173,6 @@ class Bb {
 
       if (this.pos > this.zy) {
         this.godown = false;
-        // console.log("bb:" + framect);
       }
       if (framect == (this.goframe + (frmRate * 2))) {
         var bbtorem = document.getElementById('bb' + this.id);

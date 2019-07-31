@@ -10,6 +10,7 @@ var pieceClock = 0.0;
 var clockadj = 0.0;
 var timeToGo = 3.0;
 var pxPerSec = 60.0;
+var pxPerFrame = pxPerSec / frmRate;
 var pxPerMs = pxPerSec / 1000.0;
 //STATUS BAR ///////////////////////////////////
 var sb = true;
