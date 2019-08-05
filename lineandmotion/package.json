@@ -1,11 +1,14 @@
 {
-  "name": "notation_example",
-  "version": "1",
-  "description": "notation",
+  "name": "lineandmotion_rebuild",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lineandmotion_nodejs_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4",
-    "osc": "^2.2.4",
-    "socket.io": "^2.1.1",
-    "vexflow": "^1.2.87"
+    "express": "^4.17.1"
   }
 }

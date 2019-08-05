@@ -1,65 +1,21 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<title>Notation Practice</title>
-<script src="/socket.io/socket.io.js"></script>
-<style>
-  #overlay_svg {
-    position: absolute;
-    top: 15px;
-    height: 180px;
-    left: 15px;
-    width: 1000px;
-  }
+<html lang="en" dir="ltr">
 
-  #timeline_svg {
-    background-color: black;
-    position: absolute;
-    top: 15px;
-    height: 45px;
-    left: 15px;
-    width: 1000px;
-  }
+<head>
+  <meta charset="utf-8">
+  <title>Line & Motion</title>
+  <link rel="stylesheet" type="text/css" href="lmstylesheet.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+</head>
 
-  #notationnow {
-    background-color: black;
-    position: absolute;
-    left: 315px;
-    top: 65px;
-    width: 300px;
-    height: 130px;
-  }
-
-  #nframe {
-    background-color: PaleGreen;
-    position: absolute;
-    left: 315px;
-    top: 200px;
-    width: 300px;
-    height: 133px;
-  }
-</style>
-
-<body bgcolor="#708090">
-
-  <!-- TIMELINE svg canvas element -->
-  <svg id="timeline_svg" xmlns="http://www.w3.org/2000/svg">
-  </svg>
-
-  <!-- NOTATION NOW svg canvas element -->
-  <svg id="notationnow" xmlns="http://www.w3.org/2000/svg">
-  </svg>
-
-  <!-- vexflow element -->
-  <div id="nframe"></div>
-
-  <!-- OVERLAY svg canvas element -->
-  <svg id="overlay_svg" xmlns="http://www.w3.org/2000/svg">
-    <line x1="300" y1="0" x2="300" y2="180" style=" stroke:rgb(255,255,0); stroke-width:3" />
-  </svg>
-
-
+<body onload='setup();'>
+  <!-- MAIN TIMELINE -->
+<div id='tlcanvas'></div>
+  <!-- STATUS BAR -->
+  <div id="statusbar"> </div>
   <!-- SCRIPTS AFTER DOM ELEMENTS -->
-  <script src="/vexflow/releases/vexflow-min.js "></script>
+  <script src="three.min.js"></script>
   <script src="lineandmotion_notation.js"></script>
-
 </body>
+
+</html>
