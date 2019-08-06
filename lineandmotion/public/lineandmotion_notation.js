@@ -119,7 +119,7 @@ function createScene() {
   //durframes = durpx/pxPerFrame
   //destination frame = framect + durframes
   var durpx = itfstarttime * pxPerSec;
-  var istartpx =durpx + gofretposx;
+  var istartpx = durpx + gofretposx;
   var idurframes = durpx / pxPerFrame;
   var igoframe = Math.round(framect + idurframes);
   //igoframe + dur of beat in frames
@@ -131,7 +131,7 @@ function createScene() {
     tfbt.renderOrder = 1;
     var pxPerBeat = pxPerSec / (tempo / 60);
     var startpx = istartpx + (pxPerBeat * i);
-    var goframe = Math.round(igoframe + ( (pxPerBeat/pxPerFrame) * i ));
+    var goframe = Math.round(igoframe + ((pxPerBeat / pxPerFrame) * i));
     tft.position.x = startpx;
     tft.position.z = gofretposz;
     tfbt.position.x = startpx;
@@ -148,6 +148,18 @@ function createScene() {
     var ntft = [true, tft, tfbt, goframe];
     tfs.push(ntft);
   }
+
+  // TRACKS /////////////////////////////////////
+  var trgeom = new THREE.CylinderGeometry(3, 3, 680, 32);
+  var trmatl = new THREE.MeshBasicMaterial({
+    color: "rgb(0,0,255)"
+  });
+  var tr = new THREE.Mesh(trgeom, trmatl);
+  tr.position.x = 0;
+  tr.position.z = gofretposz + 2;
+  tr.position.y = 70;
+  tr.rotation.z = -90 * Math.PI / 180;
+  scene.add(tr);
 
   // // create a point light
   pointLight =
@@ -199,24 +211,21 @@ function update(timestep) {
       }
     }
     if (framect == tfs[i][3]) { //when the tf reaches its destination frame
-        console.log("Time: " + (pieceClock / 1000).toFixed(2)
-        +  " " + "Frame: " + framect.toFixed(1) + " " +
-      "TFpos: " + tfs[i][1].position.x + " " + "goFretpos: " + gofretposx
-       + " " + "goframe: " + tfs[i][3]);
+      // console.log("Time: " + (pieceClock / 1000).toFixed(2) +  " " + "Frame: " + framect.toFixed(1) + " " + "TFpos: " + tfs[i][1].position.x + " " + "goFretpos: " + gofretposx + " " + "goframe: " + tfs[i][3]);
       // set gofretTimer so it blinks clr_limegreen
       gofretTimer = framect + 12;
+      //remove tf from scene and array
       scene.remove(scene.getObjectByName(tfs[i][1].name));
       scene.remove(scene.getObjectByName(tfs[i][2].name));
       tfs.splice(i, 1);
     }
   }
   //GO FRET /////////////////////////////////
-  if(framect >= gofretTimer){
+  if (framect >= gofretTimer) {
     gofret.material.color = clr_yellow;
     gofret.geometry = tfgeom;
     gofretborder.geometry = tfbgeom;
-  }
-  else{
+  } else {
     gofret.material.color = clr_limegreen;
     gofret.geometry = gofretGeomBig;
     gofretborder.geometry = tfbgeomBig;
@@ -233,3 +242,7 @@ function mainLoop(timestamp) {
   draw();
   requestAnimationFrame(mainLoop);
 }
+/* NOTES
+CREATE A TRACK
+CREATE AN EVENT DISC
+*/
