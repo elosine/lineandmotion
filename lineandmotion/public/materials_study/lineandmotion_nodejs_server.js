@@ -5,11 +5,12 @@ var path = require('path');
 
 //Launch 'index.html'
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/threejs/examples/webgl_materials_texture_rotation.html'));
+  // res.sendFile(path.join(__dirname + '/public/webgl_materials_variations_standard.html'));
+  res.sendFile(path.join(__dirname + '/public/webgl_gpgpu_water.html'));
 });
 //Set Up Static File Serving
-app.use(express.static(path.join(__dirname, '/threejs/examples')));
-app.use(express.static(path.join(__dirname, '/threejs')));
+app.use(express.static(path.join(__dirname, '/public')));
+// app.use(express.static(path.join(__dirname, '/threejs')));
 
 //start http server
 app.listen(4321, function() {
