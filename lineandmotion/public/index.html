@@ -15,10 +15,10 @@
    <!-- This is the 'compute shader' for the water heightmap: -->
    <script id="heightmapFragmentShader" type="x-shader/x-fragment">
 
-     #include <common>
+      #include <common>
 
-     uniform vec2 rp0;
-     uniform vec2 rp1;
+      uniform vec2 rp0;
+      uniform vec2 rp1;
       uniform vec2 rp2;
       uniform vec2 rp3;
       uniform vec2 rp4;
@@ -28,26 +28,84 @@
       uniform vec2 rp8;
       uniform vec2 rp9;
       uniform vec2 rp10;
-			uniform vec2 rp11;
-      uniform vec2 rp12;
-      uniform vec2 rp13;
-      uniform vec2 rp14;
-      uniform vec2 rp15;
-      uniform vec2 rp16;
-      uniform vec2 rp17;
-      uniform vec2 rp18;
-      uniform vec2 rp19;
-      uniform vec2 rp20;
-			uniform vec2 rp21;
-      uniform vec2 rp22;
-      uniform vec2 rp23;
-      uniform vec2 rp24;
-      uniform vec2 rp25;
-      uniform vec2 rp26;
-      uniform vec2 rp27;
-      uniform vec2 rp28;
-      uniform vec2 rp29;
-      uniform vec2 rp30;
+      univorm vec2 rpA0;
+      uniform vec2 rpA1;
+      uniform vec2 rpA2;
+      uniform vec2 rpA3;
+      uniform vec2 rpA4;
+      uniform vec2 rpA5;
+      uniform vec2 rpA6;
+      uniform vec2 rpA7;
+      uniform vec2 rpA8;
+      uniform vec2 rpA9;
+      uniform vec2 rpA10;
+      uniform vec2 rpB0;
+      uniform vec2 rpB1;
+      uniform vec2 rpB2;
+      uniform vec2 rpB3;
+      uniform vec2 rpB4;
+      uniform vec2 rpB5;
+      uniform vec2 rpB6;
+      uniform vec2 rpB7;
+      uniform vec2 rpB8;
+      uniform vec2 rpB9;
+      uniform vec2 rpB10;
+      uniform vec2 rpC0;
+      uniform vec2 rpC1;
+      uniform vec2 rpC2;
+      uniform vec2 rpC3;
+      uniform vec2 rpC4;
+      uniform vec2 rpC5;
+      uniform vec2 rpC6;
+      uniform vec2 rpC7;
+      uniform vec2 rpC8;
+      uniform vec2 rpC9;
+      uniform vec2 rpC10;
+
+      uniform vec2 rpg0;
+      uniform vec2 rpg1;
+      uniform vec2 rpg2;
+      uniform vec2 rpg3;
+      uniform vec2 rpg4;
+      uniform vec2 rpg5;
+      uniform vec2 rpg6;
+      uniform vec2 rpg7;
+      uniform vec2 rpg8;
+      uniform vec2 rpg9;
+      uniform vec2 rpg10;
+      uniform vec2 rpgA0;
+      uniform vec2 rpgA1;
+      uniform vec2 rpgA2;
+      uniform vec2 rpgA3;
+      uniform vec2 rpgA4;
+      uniform vec2 rpgA5;
+      uniform vec2 rpgA6;
+      uniform vec2 rpgA7;
+      uniform vec2 rpgA8;
+      uniform vec2 rpgA9;
+      uniform vec2 rpgA10;
+      uniform vec2 rpgB0;
+      uniform vec2 rpgB1;
+      uniform vec2 rpgB2;
+      uniform vec2 rpgB3;
+      uniform vec2 rpgB4;
+      uniform vec2 rpgB5;
+      uniform vec2 rpgB6;
+      uniform vec2 rpgB7;
+      uniform vec2 rpgB8;
+      uniform vec2 rpgB9;
+      uniform vec2 rpgB10;
+      uniform vec2 rpgC0;
+      uniform vec2 rpgC1;
+      uniform vec2 rpgC2;
+      uniform vec2 rpgC3;
+      uniform vec2 rpgC4;
+      uniform vec2 rpgC5;
+      uniform vec2 rpgC6;
+      uniform vec2 rpgC7;
+      uniform vec2 rpgC8;
+      uniform vec2 rpgC9;
+      uniform vec2 rpgC10;
 			uniform float mouseSize;
 			uniform float viscosityConstant;
 			uniform float heightCompensation;
@@ -64,7 +122,7 @@
 				// https://web.archive.org/web/20080618181901/http://freespace.virgin.net/hugo.elias/graphics/x_water.htm
 				float newHeight = ( ( north.x + south.x + east.x + west.x ) * 0.5 - heightmapValue.y ) * viscosityConstant;
 
-				// Mouse influence
+				// Ripple Sources
 				float rpph0 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rp0.x, - rp0.y ) ) * PI / mouseSize, 0.0, PI );
 				newHeight += ( cos( rpph0 ) + 1.0 ) * 0.28;
 				float rpph1 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rp1.x, - rp1.y ) ) * PI / mouseSize, 0.0, PI );
@@ -87,6 +145,168 @@
 				newHeight += ( cos( rpph9 ) + 1.0 ) * 0.28;
         float rpph10 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rp10.x, - rp10.y ) ) * PI / mouseSize, 0.0, PI );
 				newHeight += ( cos( rpph10 ) + 1.0 ) * 0.28;
+
+        float rpAph0 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA0.x, - rpA0.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpAph0 ) + 1.0 ) * 0.28;
+        float rpAph1 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA1.x, - rpA1.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpAph1 ) + 1.0 ) * 0.28;
+        float rpAph2 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA2.x, - rpA2.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpAph2 ) + 1.0 ) * 0.28;
+        float rpAph3 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA3.x, - rpA3.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpAph3 ) + 1.0 ) * 0.28;
+        float rpAph4 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA4.x, - rpA4.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpAph4 ) + 1.0 ) * 0.28;
+        float rpAph5 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA5.x, - rpA5.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpAph5 ) + 1.0 ) * 0.28;
+        float rpAph6 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA6.x, - rpA6.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpAph6 ) + 1.0 ) * 0.28;
+        float rpAph7 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA7.x, - rpA7.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpAph7 ) + 1.0 ) * 0.28;
+        float rpAph8 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA8.x, - rpA8.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpAph8 ) + 1.0 ) * 0.28;
+        float rpAph9 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA9.x, - rpA9.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpAph9 ) + 1.0 ) * 0.28;
+        float rpAph10 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA10.x, - rpA10.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpAph10 ) + 1.0 ) * 0.28;
+
+        float rpBph0 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpB0.x, - rpB0.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpBph0 ) + 1.0 ) * 0.28;
+        float rpBph1 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpB1.x, - rpB1.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpBph1 ) + 1.0 ) * 0.28;
+        float rpBph2 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpB2.x, - rpB2.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpBph2 ) + 1.0 ) * 0.28;
+        float rpBph3 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpB3.x, - rpB3.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpBph3 ) + 1.0 ) * 0.28;
+        float rpBph4 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpB4.x, - rpB4.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpBph4 ) + 1.0 ) * 0.28;
+        float rpBph5 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpB5.x, - rpB5.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpBph5 ) + 1.0 ) * 0.28;
+        float rpBph6 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpB6.x, - rpB6.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpBph6 ) + 1.0 ) * 0.28;
+        float rpBph7 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpB7.x, - rpB7.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpBph7 ) + 1.0 ) * 0.28;
+        float rpBph8 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpB8.x, - rpB8.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpBph8 ) + 1.0 ) * 0.28;
+        float rpBph9 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpB9.x, - rpB9.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpBph9 ) + 1.0 ) * 0.28;
+        float rpBph10 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpB10.x, - rpB10.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpBph10 ) + 1.0 ) * 0.28;
+
+        float rpCph0 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpC0.x, - rpC0.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpCph0 ) + 1.0 ) * 0.28;
+        float rpCph1 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpC1.x, - rpC1.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpCph1 ) + 1.0 ) * 0.28;
+        float rpCph2 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpC2.x, - rpC2.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpCph2 ) + 1.0 ) * 0.28;
+        float rpCph3 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpC3.x, - rpC3.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpCph3 ) + 1.0 ) * 0.28;
+        float rpCph4 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpC4.x, - rpC4.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpCph4 ) + 1.0 ) * 0.28;
+        float rpCph5 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpC5.x, - rpC5.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpCph5 ) + 1.0 ) * 0.28;
+        float rpCph6 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpC6.x, - rpC6.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpCph6 ) + 1.0 ) * 0.28;
+        float rpCph7 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpC7.x, - rpC7.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpCph7 ) + 1.0 ) * 0.28;
+        float rpCph8 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpC8.x, - rpC8.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpCph8 ) + 1.0 ) * 0.28;
+        float rpCph9 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpC9.x, - rpC9.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpCph9 ) + 1.0 ) * 0.28;
+        float rpCph10 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpC10.x, - rpC10.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpCph10 ) + 1.0 ) * 0.28;
+
+        float rpgph0 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpg0.x, - rpg0.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgph0 ) + 1.0 ) * 0.28;
+        float rpgph1 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpg1.x, - rpg1.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgph1 ) + 1.0 ) * 0.28;
+        float rpgph2 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpg2.x, - rpg2.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgph2 ) + 1.0 ) * 0.28;
+        float rpgph3 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpg3.x, - rpg3.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgph3 ) + 1.0 ) * 0.28;
+        float rpgph4 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpg4.x, - rpg4.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgph4 ) + 1.0 ) * 0.28;
+        float rpgph5 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpg5.x, - rpg5.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgph5 ) + 1.0 ) * 0.28;
+        float rpgph6 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpg6.x, - rpg6.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgph6 ) + 1.0 ) * 0.28;
+        float rpgph7 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpg7.x, - rpg7.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgph7 ) + 1.0 ) * 0.28;
+        float rpgph8 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpg8.x, - rpg8.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgph8 ) + 1.0 ) * 0.28;
+        float rpgph9 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpg9.x, - rpg9.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgph9 ) + 1.0 ) * 0.28;
+        float rpgph10 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpg10.x, - rpg10.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgph10 ) + 1.0 ) * 0.28;
+
+        float rpgAph0 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgA0.x, - rpgA0.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgAph0 ) + 1.0 ) * 0.28;
+        float rpgAph1 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgA1.x, - rpgA1.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgAph1 ) + 1.0 ) * 0.28;
+        float rpgAph2 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgA2.x, - rpgA2.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgAph2 ) + 1.0 ) * 0.28;
+        float rpgAph3 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgA3.x, - rpgA3.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgAph3 ) + 1.0 ) * 0.28;
+        float rpgAph4 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgA4.x, - rpgA4.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgAph4 ) + 1.0 ) * 0.28;
+        float rpgAph5 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgA5.x, - rpgA5.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgAph5 ) + 1.0 ) * 0.28;
+        float rpgAph6 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgA6.x, - rpgA6.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgAph6 ) + 1.0 ) * 0.28;
+        float rpgAph7 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgA7.x, - rpgA7.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgAph7 ) + 1.0 ) * 0.28;
+        float rpgAph8 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgA8.x, - rpgA8.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgAph8 ) + 1.0 ) * 0.28;
+        float rpgAph9 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgA9.x, - rpgA9.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgAph9 ) + 1.0 ) * 0.28;
+        float rpgAph10 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgA10.x, - rpgA10.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgAph10 ) + 1.0 ) * 0.28;
+
+        float rpgBph0 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgB0.x, - rpgB0.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgBph0 ) + 1.0 ) * 0.28;
+        float rpgBph1 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgB1.x, - rpgB1.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgBph1 ) + 1.0 ) * 0.28;
+        float rpgBph2 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgB2.x, - rpgB2.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgBph2 ) + 1.0 ) * 0.28;
+        float rpgBph3 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgB3.x, - rpgB3.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgBph3 ) + 1.0 ) * 0.28;
+        float rpgBph4 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgB4.x, - rpgB4.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgBph4 ) + 1.0 ) * 0.28;
+        float rpgBph5 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgB5.x, - rpgB5.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgBph5 ) + 1.0 ) * 0.28;
+        float rpgBph6 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgB6.x, - rpgB6.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgBph6 ) + 1.0 ) * 0.28;
+        float rpgBph7 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgB7.x, - rpgB7.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgBph7 ) + 1.0 ) * 0.28;
+        float rpgBph8 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgB8.x, - rpgB8.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgBph8 ) + 1.0 ) * 0.28;
+        float rpgBph9 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgB9.x, - rpgB9.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgBph9 ) + 1.0 ) * 0.28;
+        float rpgBph10 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgB10.x, - rpgB10.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgBph10 ) + 1.0 ) * 0.28;
+
+        float rpgCph0 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgC0.x, - rpgC0.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgCph0 ) + 1.0 ) * 0.28;
+        float rpgCph1 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgC1.x, - rpgC1.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgCph1 ) + 1.0 ) * 0.28;
+        float rpgCph2 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgC2.x, - rpgC2.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgCph2 ) + 1.0 ) * 0.28;
+        float rpgCph3 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgC3.x, - rpgC3.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgCph3 ) + 1.0 ) * 0.28;
+        float rpgCph4 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgC4.x, - rpgC4.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgCph4 ) + 1.0 ) * 0.28;
+        float rpgCph5 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgC5.x, - rpgC5.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgCph5 ) + 1.0 ) * 0.28;
+        float rpgCph6 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgC6.x, - rpgC6.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgCph6 ) + 1.0 ) * 0.28;
+        float rpgCph7 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgC7.x, - rpgC7.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgCph7 ) + 1.0 ) * 0.28;
+        float rpgCph8 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgC8.x, - rpgC8.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgCph8 ) + 1.0 ) * 0.28;
+        float rpgCph9 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgC9.x, - rpgC9.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgCph9 ) + 1.0 ) * 0.28;
+        float rpgCph10 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpgC10.x, - rpgC10.y ) ) * PI / mouseSize, 0.0, PI );
+        newHeight += ( cos( rpgCph10 ) + 1.0 ) * 0.28;
+
 
 				heightmapValue.y = heightmapValue.x;
 				heightmapValue.x = newHeight;
@@ -308,6 +528,8 @@
       var clr_limegreen = new THREE.Color("rgb(153, 255, 0)");
       var clr_yellow = new THREE.Color("rgb(255, 255, 0)");
       var clr_orange = new THREE.Color("rgb(255, 128, 0)");
+      var clr_red = new THREE.Color("rgb(255, 0, 0)");
+      var clr_purple = new THREE.Color("rgb(255, 0, 255)");
 			// Texture width for simulation
       var WIDTH = 196;
 			// Water size in system units
@@ -333,13 +555,13 @@
 			var simplex = new SimplexNoise();
       //GO FRETS ///////////////////////////////
       var gofretposx = -120;
-      var gofretposz = 247;
+      var gofretposz = 227;
       //TEMPO FRETS ///////////////////////////////
       var gofret1, tfbgeom, tfbmatl, gofretborder;
       var tfs = [];
       var gofretTimer = 0;
       var tfgeom = new THREE.CubeGeometry(30, 60, 5);
-      var gofretGeomBig = new THREE.CubeGeometry(14, 64, 13);
+      var gofretGeomBig = new THREE.CubeGeometry(30, 64, 13);
       var tfbgeom = new THREE.EdgesGeometry(tfgeom);
       var tfbgeomBig = new THREE.EdgesGeometry(gofretGeomBig);
       var gfmatl = new THREE.MeshBasicMaterial({
@@ -348,6 +570,19 @@
       var tfmatl = new THREE.MeshBasicMaterial({
         color: "rgb(255,128,0)"
       });
+
+      var ges1beats = [];
+      var ges1 = [];
+      var gesgo1;
+
+      // var gggeom = new THREE.CubeGeometry(25, 40, 6);
+      ges1beats = [5.147, 6.83, 7.5, 7.6, 8.2812];
+      var gggeom = new THREE.CylinderBufferGeometry(6, 6, 40, 24);
+      var gggeombig = new THREE.CubeGeometry(29, 44, 10);
+      var ggmatl = new THREE.MeshLambertMaterial({color: "rgb(255,128,0)"});
+      var gesmatl = new THREE.MeshLambertMaterial({color: "rgb(255,0,255)"});
+      var ggTimer = 0;
+      var gg1, gg2, gg3, gg4;
 
 			init();
       requestAnimationFrame(mainLoop);
@@ -436,40 +671,60 @@
         gofret4.position.z = gofretposz;
         gofret4.rotation.z = -90 * Math.PI / 180;
         scene.add(gofret4);
+        //GESTURE GO
+        gg1 = new THREE.Mesh(gggeom, ggmatl);
+        gg2 = new THREE.Mesh(gggeom, ggmatl);
+        gg3 = new THREE.Mesh(gggeom, ggmatl);
+        gg4 = new THREE.Mesh(gggeom, ggmatl);
+        gg1.position.z = gofretposz;
+        gg1.position.x = -120;
+        scene.add(gg1);
+        gg2.position.z = gofretposz;
+        gg2.position.x = -40;
+        scene.add(gg2);
+        gg3.position.z = gofretposz;
+        gg3.position.x = 40;
+        scene.add(gg3);
+        gg4.position.z = gofretposz;
+        gg4.position.x = 120;
+        scene.add(gg4);
+
+        var tempo = 60.0;
+        var pxPerBeat = pxPerSec / (tempo / 60);
+        //GESTURES
+        for (var i = 0; i < ges1beats.length; i++) {
+          var ges = new THREE.Mesh(gggeom, gesmatl);
+          var startpx = gofretposz - (pxPerBeat * ges1beats[i]);
+          var goframe = Math.round( (pxPerBeat / pxPerFrame) * ges1beats[i] );
+          // ges.rotation.z = -90 * Math.PI / 180;
+          ges.position.z = startpx;
+          ges.position.x = gofretposx;
+          ges.name = "ges" + i;
+          var ges1ar = [true, ges, goframe];
+          ges1.push(ges1ar);
+        }
         // ADD TEMPO FRETS
         //given start time, tempo, #beats, get destination frame
         var itfstarttime = 3;
-        var tempo = 60.0;
         var numbeats = 52;
-        //durpx = initialstarttime*pxPerSec
-        //startpx = durpx + gofretposx
-        //durframes = durpx/pxPerFrame
-        //destination frame = framect + durframes
         var durpx = itfstarttime * pxPerSec;
         var istartpx = gofretposz - durpx;
         var idurframes = durpx / pxPerFrame;
         var igoframe = Math.round(framect + idurframes);
-        //igoframe + dur of beat in frames
-        //pause at destination, print framect, destination frame, position.x
         for (var i = 0; i < numbeats; i++) {
           //Add orange fret and move
           var tft = new THREE.Mesh(tfgeom, tfmatl);
-          var pxPerBeat = pxPerSec / (tempo / 60);
           var startpx = istartpx - (pxPerBeat * i);
           var goframe = Math.round(igoframe + ((pxPerBeat / pxPerFrame) * i));
           tft.rotation.z = -90 * Math.PI / 180;
           tft.position.z = startpx;
           tft.position.x = gofretposx;
           tft.name = "tft" + i;
-          /* [
-          boolean:add (so it is added to the scene only once),
-          tft: tempo fret mesh,
-          goframe
-          ] */
 
           var ntft = [true, tft, goframe];
           tfs.push(ntft);
         }
+
         heightmapVariable.material.uniforms[ "mouseSize" ].value = 10;
         heightmapVariable.material.uniforms[ "viscosityConstant" ].value = 0.996;
 
@@ -529,6 +784,84 @@
 				heightmapVariable.material.uniforms[ "rp8" ] = { value: new THREE.Vector2( 10000, 10000 ) };
 				heightmapVariable.material.uniforms[ "rp9" ] = { value: new THREE.Vector2( 10000, 10000 ) };
 				heightmapVariable.material.uniforms[ "rp10" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+        heightmapVariable.material.uniforms[ "rpA0" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpA1" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpA2" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpA3" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpA4" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpA5" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpA6" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpA7" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpA8" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpA9" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpA10" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpB0" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpB1" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpB2" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpB3" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpB4" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpB5" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpB6" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpB7" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpB8" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpB9" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpB10" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpC0" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpC1" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpC2" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpC3" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpC4" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpC5" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpC6" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpC7" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpC8" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpC9" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpC10" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+
+				heightmapVariable.material.uniforms[ "rpg0" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpg1" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpg2" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpg3" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpg4" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpg5" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpg6" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpg7" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpg8" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpg9" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpg10" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgA0" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgA1" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgA2" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgA3" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgA4" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgA5" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgA6" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgA7" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgA8" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgA9" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgA10" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgB0" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgB1" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgB2" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgB3" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgB4" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgB5" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgB6" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgB7" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgB8" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgB9" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgB10" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgC0" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgC1" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgC2" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgC3" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgC4" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgC5" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgC6" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgC7" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgC8" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgC9" ] = { value: new THREE.Vector2( 10000, 10000 ) };
+				heightmapVariable.material.uniforms[ "rpgC10" ] = { value: new THREE.Vector2( 10000, 10000 ) };
 				heightmapVariable.material.uniforms[ "mouseSize" ] = { value: 20.0 };
 				heightmapVariable.material.uniforms[ "viscosityConstant" ] = { value: 0.98 };
 				heightmapVariable.material.uniforms[ "heightCompensation" ] = { value: 0 };
@@ -600,29 +933,6 @@
 					gpuCompute.doRenderTarget( smoothShader, currentRenderTarget );
 				}
 			}
-
-      // function sphereDynamics() {
-  		// 		var currentRenderTarget = gpuCompute.getCurrentRenderTarget( heightmapVariable );
-  		// 		readWaterLevelShader.uniforms[ "levelTexture" ].value = currentRenderTarget.texture;
-  		// 		for ( var i = 0; i < tfs.length; i ++ ) {
-  		// 			var obj = tfs[i][1];
-  		// 			if ( obj ) {
-  		// 				// Read water level and orientation
-  		// 				var u = 0.5 * obj.position.x / BOUNDS_HALF + 0.5;
-  		// 				var v = 1 - ( 0.5 * obj.position.z / BOUNDS_HALF + 0.5 );
-  		// 				readWaterLevelShader.uniforms[ "point1" ].value.set( u, v );
-  		// 				gpuCompute.doRenderTarget( readWaterLevelShader, readWaterLevelRenderTarget );
-  		// 				renderer.readRenderTargetPixels( readWaterLevelRenderTarget, 0, 0, 4, 1, readWaterLevelImage );
-  		// 				var pixels = new Float32Array( readWaterLevelImage.buffer );
-  		// 				// Get orientation
-  		// 				waterNormal.set( pixels[ 1 ], 0, - pixels[ 2 ] );
-  		// 				var pos = obj.position;
-  		// 				// Set height
-  		// 				pos.y = pixels[ 0 ];
-      //       }
-      //     }
-      // }
-
       // ANIMATION ENGINE -------------------------------------------- //
       function mainLoop(timestamp) {
         delta += timestamp - lastFrameTimeMs;
@@ -644,15 +954,9 @@
               uniforms[ rpname ].value.set(-120, tfs[i][1].position.z );
             }
           }
-  				// Do the gpu computation
   				gpuCompute.compute();
-          // sphereDynamics();
-  				// Get compute output in custom uniform
   				waterUniforms[ "heightmap" ].value = gpuCompute.getCurrentRenderTarget( heightmapVariable ).texture;
-
-				// Render
-				renderer.render( scene, camera );
-
+  				renderer.render( scene, camera );
 			}
 
       // UPDATE ------------------------------------------------------ //
@@ -681,6 +985,35 @@
             tfs.splice(i, 1);
           }
         }
+        //Gestures /////////////////////////////
+        for (var i = 0; i < ges1.length; i++) { //if it has not reached go fret
+          if (ges1[i][1].position.z < gofretposz) {
+            ges1[i][1].position.z += pxPerFrame;
+          }
+          //add the tf to the scene if it is in the scene
+          if (ges1[i][1].position.z > -1000) {
+            if (ges1[i][0]) { //gate so the tf is only added to the scene once
+              ges1[i][0] = false;
+              scene.add(ges1[i][1]);
+            }
+          }
+          if (framect == ges1[i][2]) { //when the tf reaches its destination frame
+            // set gofretTimer so it blinks clr_limegreen
+            ggTimer = framect + 11;
+            //remove tf from scene and array
+            scene.remove(scene.getObjectByName(ges1[i][1].name));
+            ges1.splice(i, 1);
+          }
+        }
+        //GESTURE GO  /////////////////////////////////
+      if (framect >= ggTimer) {
+        gg1.material.color = clr_purple;
+        gg1.geometry = gggeom;
+      }
+      else {
+        gg1.material.color = clr_red;
+        gg1.geometry = gggeombig;
+      }
         //GO FRET /////////////////////////////////
         if (framect >= gofretTimer) {
           gofret1.material.color = clr_yellow;
