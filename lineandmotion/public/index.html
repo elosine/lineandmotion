@@ -28,7 +28,8 @@
       uniform vec2 rp8;
       uniform vec2 rp9;
       uniform vec2 rp10;
-      univorm vec2 rpA0;
+
+      uniform vec2 rpA0;
       uniform vec2 rpA1;
       uniform vec2 rpA2;
       uniform vec2 rpA3;
@@ -147,7 +148,8 @@
 				newHeight += ( cos( rpph10 ) + 1.0 ) * 0.28;
 
         float rpAph0 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA0.x, - rpA0.y ) ) * PI / mouseSize, 0.0, PI );
-        newHeight += ( cos( rpAph0 ) + 1.0 ) * 0.28;
+				newHeight += ( cos( rpAph0 ) + 1.0 ) * 0.28;
+
         float rpAph1 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA1.x, - rpA1.y ) ) * PI / mouseSize, 0.0, PI );
         newHeight += ( cos( rpAph1 ) + 1.0 ) * 0.28;
         float rpAph2 = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( rpA2.x, - rpA2.y ) ) * PI / mouseSize, 0.0, PI );
@@ -584,6 +586,8 @@
       var ggTimer = 0;
       var gg1, gg2, gg3, gg4;
 
+      var aCtx;
+
 			init();
       requestAnimationFrame(mainLoop);
 
@@ -729,6 +733,16 @@
         heightmapVariable.material.uniforms[ "viscosityConstant" ].value = 0.996;
 
         smoothWater();
+        aCtx = new(window.AudioContext || window.webkitAudioContext)();
+        if(typeof AudioContext != "undefined" || typeof webkitAudioContext != "undefined") {
+           var resumeAudio = function() {
+              if(typeof g_WebAudioContext == "undefined" || g_WebAudioContext == null) return;
+              if(g_WebAudioContext.state == "suspended") g_WebAudioContext.resume();
+              document.removeEventListener("click", resumeAudio);
+           };
+           document.addEventListener("click", resumeAudio);
+        }
+
 			}
 
 
@@ -1000,6 +1014,7 @@
           if (framect == ges1[i][2]) { //when the tf reaches its destination frame
             // set gofretTimer so it blinks clr_limegreen
             ggTimer = framect + 11;
+            playsamp("/violin_pizzicato_g4-g5/153611__carlos-vaquero__violin-g-4-pizzicato-non-vibrato.wav");
             //remove tf from scene and array
             scene.remove(scene.getObjectByName(ges1[i][1].name));
             ges1.splice(i, 1);
@@ -1030,6 +1045,39 @@
 
       function map_range(value, low1, high1, low2, high2) {
         return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+      }
+      function playsamp(sampname) {
+
+
+
+
+
+
+        // Create a buffer for the incoming sound content
+        var source = aCtx.createBufferSource();
+        // Create the XHR which will grab the audio contents
+        var request = new XMLHttpRequest();
+        // Set the audio file src here
+        request.open('GET', sampname, true);
+        // Setting the responseType to arraybuffer sets up the audio decoding
+        request.responseType = 'arraybuffer';
+        request.onload = function() {
+          // Decode the audio once the require is complete
+          aCtx.decodeAudioData(request.response, function(buffer) {
+            source.buffer = buffer;
+            // Connect the audio to source (multiple audio buffers can be connected!)
+            source.connect(aCtx.destination);
+            // Simple setting for the buffer
+            source.loop = false;
+            source.playbackRate.value = 2;
+            source.start(1);
+
+          }, function(e) {
+            console.log('Audio error! ', e);
+          });
+        }
+        // Send the request which kicks off
+        request.send();
       }
 
 		</script>
