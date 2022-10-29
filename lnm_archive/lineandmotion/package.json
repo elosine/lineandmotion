@@ -5,7 +5,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "osc": "^2.2.4",
-    "socket.io": "^2.1.1",
+    "socket.io": "^2.5.0",
     "vexflow": "^1.2.87"
   }
 }
